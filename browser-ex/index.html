@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Stream Example</title>
+</head>
+<body>
+  <h1>WebSocket Stream Example</h1>
+
+  <div>
+    <label for="value-slider">Value: <span id="value-display">0</span></label>
+    <br>
+    <input type="range" id="value-slider" min="0" max="255" value="0">
+  </div>
+
+  <div>
+    <button id="send-button">Send Message</button>
+  </div>
+
+  <div>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <p>Stream: <span id="stream-name">example</span></p>
+  </div>
+
+  <div>
+    <h3>Received Messages:</h3>
+    <div id="messages"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
