@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 3000;
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds
 
 // Track streams - maps stream name to Set of WebSocket connections
 const streams = new Map();
@@ -34,6 +35,13 @@ function broadcast(streams, streamName, message, sender) {
 // WebSocket connection handler
 wss.on('connection', (ws) => {
   console.log('New client connected');
+
+  // Initialize heartbeat
+  ws.isAlive = true;
+
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
 
   ws.on('message', (data) => {
     try {
@@ -121,8 +129,26 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Heartbeat to keep connections alive
+const heartbeat = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (ws.isAlive === false) {
+      console.log('Terminating dead connection');
+      return ws.terminate();
+    }
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, HEARTBEAT_INTERVAL);
+
+// Clean up heartbeat on server close
+wss.on('close', () => {
+  clearInterval(heartbeat);
+});
+
 // Start server
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`WebSocket server ready`);
+  console.log(`Heartbeat interval: ${HEARTBEAT_INTERVAL}ms`);
 });
