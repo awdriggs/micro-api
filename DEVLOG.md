@@ -1,5 +1,16 @@
 # Development Log
 
+## d12042025
+testing the server with the pico w
+
+websocat sockets code sending pico temperature data 
+`{"type":"join","stream":"pico-temp"}`
+
+
+websocat testing eight px code 
+`{"type":"join","stream":"eight-px"}`
+
+
 ## d12022025
 setup webserver with node, express, and websockets module.
 
