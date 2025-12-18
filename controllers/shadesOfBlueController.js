@@ -6,7 +6,7 @@ export async function handleShadesOfBlue(msg, ws, streams, broadcast) {
 
   // Save sensor reading to MongoDB
   try {
-    const SensorReading = getSensorReadingModel('shades-of-blue');
+    const SensorReading = getSensorReadingModel('shades-of-blue'); //specify the database name here as the param!
     const reading = new SensorReading({
       values: msg.values
     });

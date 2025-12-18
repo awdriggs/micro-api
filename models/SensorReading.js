@@ -27,7 +27,7 @@ const sensorReadingSchema = new mongoose.Schema({
     required: true
   }
 }, {
-  collection: 'sensor_data'
+  collection: 'sensor_data' //specify the collection that the data will appear in.
 });
 
 // Export a function that returns the model for a specific database

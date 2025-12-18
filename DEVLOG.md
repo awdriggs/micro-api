@@ -1,4 +1,13 @@
 # Development Log
+## d12182025
+lots of changes.
+- add mongoose to connect to mongodb atlas
+- created a model for shades of blue readings
+- created a custom handler to save readings to the database when you get them
+- tested locally, works.
+- refactored code with claude to be more abstracted.
+- added mongoose connection stream to dokku site.
+
 
 ## d12042025
 testing the server with the pico w
