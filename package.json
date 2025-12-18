@@ -1,5 +1,6 @@
 {
   "name": "micro-api",
+  "type": "module",
   "version": "1.0.0",
   "description": "WebSocket proxy server for microcontroller projects",
   "main": "server.js",
@@ -7,10 +8,15 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["websocket", "microcontroller", "proxy"],
+  "keywords": [
+    "websocket",
+    "microcontroller",
+    "proxy"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^4.18.2",
     "ws": "^8.14.2"
   },

@@ -1,24 +1,31 @@
-const express = require('express');
-const http = require('http');
-const WebSocket = require('ws');
+import express from 'express';
+import http from 'http';
+import { WebSocketServer, WebSocket } from 'ws';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+//import all contorller for specific projects with special logic
+import { handleColorValue } from './controllers/colorValueController.js';
+import { handleShadesOfBlue } from './controllers/shadesOfBlueController.js';
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocketServer({ server });
 
 const PORT = process.env.PORT || 3000;
 const HEARTBEAT_INTERVAL = 30000; // 30 seconds
 
+// Secrets
+dotenv.config();
+
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI)
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.error("Error connecting to MongoDB:", err));
+
 // Track streams - maps stream name to Set of WebSocket connections
 const streams = new Map();
-
-// Project-specific handlers
-const projectHandlers = {
-  'color-value': (msg, ws, streams) => {
-    console.log('Color-value handler:', msg);
-    broadcast(streams, ws.currentStream, msg, ws);
-  }
-};
 
 // Broadcast message to all clients in a stream except sender
 function broadcast(streams, streamName, message, sender) {
@@ -31,6 +38,12 @@ function broadcast(streams, streamName, message, sender) {
     }
   });
 }
+
+// Project-specific handlers
+const projectHandlers = {
+  'color-value': (msg, ws, streams) => handleColorValue(msg, ws, streams, broadcast),
+  'shades-of-blue': (msg, ws, streams) => handleShadesOfBlue(msg, ws, streams, broadcast)
+};
 
 // WebSocket connection handler
 wss.on('connection', (ws) => {
