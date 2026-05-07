@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './config/database.js';
@@ -18,6 +19,7 @@ const HEARTBEAT_INTERVAL = 30000; // 30 seconds
 
 // Initialize Express and HTTP server
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 
 // Initialize WebSocket server
