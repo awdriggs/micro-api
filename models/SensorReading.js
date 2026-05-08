@@ -21,6 +21,9 @@ const sensorReadingSchema = new mongoose.Schema({
       max: 255
     }
   },
+  device_id: {
+    type: String
+  },
   timestamp: {
     type: Date,
     default: Date.now,

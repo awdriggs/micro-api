@@ -32,6 +32,7 @@ export function setupRoutes(app, streamManager) {
         if (req.query.before) query.timestamp.$lt = new Date(req.query.before);
         if (req.query.after) query.timestamp.$gt = new Date(req.query.after);
       }
+      if (req.query.device) query.device_id = req.query.device;
 
       const db = mongoose.connection.useDb(dbName);
       const collection = db.collection('sensor_data');

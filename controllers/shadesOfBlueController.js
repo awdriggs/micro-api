@@ -8,7 +8,8 @@ export async function handleShadesOfBlue(msg, ws, streams, broadcast) {
   try {
     const SensorReading = getSensorReadingModel('shades-of-blue'); //specify the database name here as the param!
     const reading = new SensorReading({
-      values: msg.values
+      values: msg.values,
+      device_id: msg.device_id
     });
     await reading.save();
     console.log('Sensor reading saved to database');
