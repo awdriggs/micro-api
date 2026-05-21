@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { getSensorReadingModel } from '../models/SensorReading.js';
 
 export function setupRoutes(app, streamManager) {
   app.get('/', (req, res) => {
@@ -11,6 +12,31 @@ export function setupRoutes(app, streamManager) {
 
   app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
+  });
+
+  app.post('/api/readings/shades-of-blue', async (req, res) => {
+    const { r, g, b, device_id } = req.body;
+
+    if ([r, g, b].some(v => typeof v !== 'number' || v < 0 || v > 255)) {
+      return res.status(400).json({ error: 'r, g, b must be numbers between 0 and 255' });
+    }
+
+    try {
+      const SensorReading = getSensorReadingModel('shades-of-blue');
+      const reading = new SensorReading({ values: { r, g, b }, device_id });
+      await reading.save();
+
+      streamManager.broadcast('shades-of-blue', {
+        type: 'data',
+        device_id,
+        values: { r, g, b }
+      }, null);
+
+      res.status(201).json({ ok: true });
+    } catch (err) {
+      console.error('Error saving reading:', err);
+      res.status(500).json({ error: 'Failed to save reading' });
+    }
   });
 
   app.get('/api/readings/:dbName', async (req, res) => {

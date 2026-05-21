@@ -20,6 +20,7 @@ const HEARTBEAT_INTERVAL = 30000; // 30 seconds
 // Initialize Express and HTTP server
 const app = express();
 app.use(cors());
+app.use(express.json());
 const server = http.createServer(app);
 
 // Initialize WebSocket server
